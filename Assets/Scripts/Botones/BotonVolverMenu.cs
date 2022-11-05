@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class BotonJugar : Boton
+public class BotonVolverMenu : Boton
 {
     override
     public void OnUp(){
 
-        MusicController.Instancia.BotonClick();
-        SceneManager.LoadScene("Juego");
+        SceneManager.LoadScene("MainMenu");
 
     }
+
 }

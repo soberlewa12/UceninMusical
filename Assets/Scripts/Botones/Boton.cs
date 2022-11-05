@@ -9,6 +9,7 @@ public abstract class Boton : MonoBehaviour
 
     public void OnEnter(){
 
+        Debug.Log(MusicController.Instancia);
         MusicController.Instancia.BotonEncima();
 
     }

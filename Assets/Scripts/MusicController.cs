@@ -9,41 +9,47 @@ public class MusicController : MonoBehaviour
     
     public static MusicController Instancia;
 
-
+    [SerializeField] private AudioMixer mixer;
     [SerializeField] private AudioSource FxAudioSource;
     [SerializeField] private List<AudioClip> Fx;
 
-    public void Awake() {
-        if(this != null){
-
-            Destroy(this);
-
+    public void Awake() 
+    {
+        if(Instancia != null)
+        {  
+            Destroy(this.gameObject);
         }
-
-        Instancia = this;
-        DontDestroyOnLoad(this);
-
+        else
+        {
+            Instancia = this;
+            DontDestroyOnLoad(this.gameObject);
+        }
     }
 
-    public void BotonEncima(){
-
-        FxAudioSource.clip = Fx[0];
-        FxAudioSource.Play();
-
+    private void Start() 
+    {    
+        mixer.SetFloat("MixerMaster", (PlayerPrefs.GetFloat("volumenMixer")*83 - 80));
     }
 
-    public void BotonSeleccion(){
-
-        FxAudioSource.clip = Fx[1];
-        FxAudioSource.Play();
-
+    //Sonido cuando pasamos el cursor por encima
+    public void BotonEncima()
+    {
+        this.FxAudioSource.clip = Fx[0];
+        this.FxAudioSource.Play();
     }
 
-    public void BotonAtras(){
+    //Sonido cuando hacemos click en un boton
+    public void BotonClick()
+    {
+        this.FxAudioSource.clip = Fx[1];
+        this.FxAudioSource.Play();
+    }
 
-        FxAudioSource.clip = Fx[2];
-        FxAudioSource.Play();
-
+    //Sonido cuando hacemos click en un boton que nos hace retroceder de un panel a otro.
+    public void BotonAtras()
+    {
+        this.FxAudioSource.clip = Fx[2];
+        this.FxAudioSource.Play();
     }
 
 }

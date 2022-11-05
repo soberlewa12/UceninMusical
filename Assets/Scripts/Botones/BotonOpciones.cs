@@ -12,7 +12,7 @@ public class BotonOpciones : Boton
     override
     public void OnUp(){
 
-        MusicController.Instancia.BotonSeleccion();
+        MusicController.Instancia.BotonClick();
         PanelToOpen.SetActive(true);
         PanelToClose.SetActive(false);
 
