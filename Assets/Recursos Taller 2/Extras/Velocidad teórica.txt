@@ -1,0 +1,4 @@
+Según los ultimos estudios realizados se llegó a la
+conclusión de que Ucenin puede llegar desde el DISC
+al DIMM en  tan solo 5 segundos (Incluso se cree
+que podría ser menos en la práctica).

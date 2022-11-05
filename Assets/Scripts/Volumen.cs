@@ -2,38 +2,41 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Audio;
 
 public class Volumen : MonoBehaviour
 {
-    public Slider slider;
-    public float sliderValue;
-    public Image imageMute;
-    // Start is called before the first frame update
+
+    [SerializeField] private GameObject MuteGameObject;
+    [SerializeField] private Sprite spriteMute;
+    [SerializeField] private AudioMixer mixer;
+    [SerializeField] private Slider slider;
+
     void Start()
     {
-        slider.value = PlayerPrefs.GetFloat("volumenAudio", 0.5f);
-        AudioListener.volume = slider.value;
-        MuteCheck();
-        
+        slider.value = PlayerPrefs.GetFloat("volumenMixer");
+        mixer.SetFloat("MixerMaster", (slider.value*83 - 80));
+        SliderOnUp();
     }
 
-    public void ChangeSlider(float valor) 
+    public void ChangeSlider() 
     {
-        sliderValue = valor;
-        PlayerPrefs.SetFloat("volumenAudio", sliderValue);
-        AudioListener.volume = slider.value;
-        MuteCheck();
+        mixer.SetFloat("MixerMaster", (slider.value*83 - 80));
     }
 
-    public void MuteCheck() 
+    public void SliderOnUp() 
     {
-        if (sliderValue == 0)
+        PlayerPrefs.SetFloat("volumenMixer", slider.value);
+
+        if (slider.value == 0)
         {
-            imageMute.enabled = true;
+            MuteGameObject.GetComponent<Image>().sprite = spriteMute;
+            MuteGameObject.GetComponent<Image>().color = new Color(255, 255, 255, 255);
         }
         else 
         { 
-            imageMute.enabled = false;
+            MuteGameObject.GetComponent<Image>().sprite = null;
+            MuteGameObject.GetComponent<Image>().color = new Color(255, 255, 255, 0);
         }
     }
 }
