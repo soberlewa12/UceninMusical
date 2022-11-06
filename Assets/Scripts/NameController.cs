@@ -9,12 +9,19 @@ public class NameController : MonoBehaviour
     public static NameController Instancia;
     [SerializeField] private TextMeshProUGUI TextAdvertencia;
     [SerializeField] private TextMeshProUGUI TextCuadro;
+    [SerializeField] private TextMeshProUGUI PlaceHolder;
     private bool NombreIncorrecto;
 
 
     private void Start() 
     {
+        PlaceHolder.text = PlayerPrefs.GetString("Nombre");
         Instancia = this;
+
+    }
+    private void OnEnable() 
+    {
+        PlaceHolder.text = PlayerPrefs.GetString("Nombre");
     }
 
     public void OnValueChanged()
@@ -35,6 +42,7 @@ public class NameController : MonoBehaviour
         {
             TextAdvertencia.text = "";
             GameController.Instancia.setNombreIncorrecto(false);
+            PlayerPrefs.SetString("Nombre", this.TextCuadro.text);
             this.NombreIncorrecto = false;
         }
         Debug.Log(this.TextCuadro.text.Length - 1);
