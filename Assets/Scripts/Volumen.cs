@@ -28,7 +28,7 @@ public class Volumen : MonoBehaviour
     {
         PlayerPrefs.SetFloat("volumenMixer", slider.value);
 
-        if (slider.value == 0)
+        if (slider.value == 0.3f)
         {
             MuteGameObject.GetComponent<Image>().sprite = spriteMute;
             MuteGameObject.GetComponent<Image>().color = new Color(255, 255, 255, 255);

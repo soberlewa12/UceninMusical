@@ -9,7 +9,6 @@ public class BotonVolver : Boton
     
     [SerializeField] private GameObject PanelToOpen;
     [SerializeField] private GameObject PanelToClose;
-    [SerializeField] private GameObject CuadroDeTexto;
 
     override
     public void OnUp(){

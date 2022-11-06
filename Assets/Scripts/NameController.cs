@@ -45,7 +45,6 @@ public class NameController : MonoBehaviour
             PlayerPrefs.SetString("Nombre", this.TextCuadro.text);
             this.NombreIncorrecto = false;
         }
-        Debug.Log(this.TextCuadro.text.Length - 1);
     }
 
     IEnumerator Parpadeo(){

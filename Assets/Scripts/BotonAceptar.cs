@@ -3,18 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class BotonOpciones : Boton
+public class BotonAceptar : Boton
 {
 
-    
-    [SerializeField] private GameObject PanelToOpen;
     [SerializeField] private GameObject PanelToClose;
 
     override
     public void OnUp()
     {
         MusicController.Instancia.BotonClick();
-        PanelToOpen.SetActive(true);
         PanelToClose.SetActive(false);
     }
 

@@ -7,11 +7,9 @@ public abstract class Boton : MonoBehaviour
     
     public abstract void OnUp();
 
-    public void OnEnter(){
-
-        Debug.Log(MusicController.Instancia);
+    public void OnEnter()
+    {
         MusicController.Instancia.BotonEncima();
-
     }
 
 }

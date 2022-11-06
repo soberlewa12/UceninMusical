@@ -35,14 +35,13 @@ public class GameController : MonoBehaviour
         return this.NombreIncorrecto;
     }
 
-    public bool getSkinEspacial()
-    {
-        return this.SkinEspecial;
-    }
-
-    public void setSkinEspacial(bool SkinEspecial)
+    public void setSkinEspecial(bool SkinEspecial)
     {
         this.SkinEspecial = SkinEspecial;
     }
 
+    public bool getSkinEspecial()
+    {
+        return this.SkinEspecial;
+    }
 }
