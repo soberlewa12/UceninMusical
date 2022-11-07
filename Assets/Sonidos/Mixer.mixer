@@ -69,6 +69,8 @@ AudioMixerController:
   m_ExposedParameters:
   - guid: 147a1eb4f3bbd1440b23dcbb3d97da84
     name: MixerMaster
+  - guid: 7c8a139425edb7b409f1350f342f737c
+    name: MixerMusic
   - guid: 04b94f6398c7a3e4a901383a6cf1b538
     name: LowPassMusic
   m_AudioMixerGroupViews:

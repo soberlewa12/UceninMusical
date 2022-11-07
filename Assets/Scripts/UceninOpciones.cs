@@ -17,6 +17,8 @@ public class UceninOpciones : MonoBehaviour
     private bool seleccionado;
     private int contRotaciones;
 
+    private bool InteraccionActiva;
+
     private void Start() 
     {
         this.Exit = false;

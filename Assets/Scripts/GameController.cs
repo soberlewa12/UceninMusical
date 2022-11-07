@@ -1,18 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
+using System.IO;
 
 public class GameController : MonoBehaviour
 {
-    
-    public static GameController Instancia;
-    [SerializeField] GameObject[] PartesUcenin;
-    [SerializeField] Renderer[] PartesChest;
-    private int interaccion;
-    private int auxInteraccion;
-    private Color MaterialAux;
-
-    private int contador;
     //0. LeftHand
     //1. RightHand
     //2. LeftFoot
@@ -24,6 +17,27 @@ public class GameController : MonoBehaviour
     //8. 
     //9. 
     //10. 
+
+    public static GameController Instancia;
+    [SerializeField] GameObject[] PartesUcenin;
+    [SerializeField] Renderer[] PartesChest;
+    [SerializeField] GameObject NBackground;
+    [SerializeField] GameObject BackgroundCross;
+    [SerializeField] GameObject MiddleArrow;
+
+    [SerializeField] TextMeshPro TextUcenin;
+    [SerializeField] GameObject MapaUCN;
+    private int interaccion;
+    private int auxInteraccion;
+    private Color MaterialAux;
+
+    private int AccionAux;
+    private StreamReader reader;
+    private string path;
+    private string Textpath;
+
+    private Color materialAzul;
+    private Color materialNaranjo;
 
     private void Awake() 
     {
@@ -38,10 +52,15 @@ public class GameController : MonoBehaviour
     }
 
     private void Start() {
-        
+    
+        materialAzul = PartesUcenin[8].GetComponent<Renderer>().material.color;
+        materialNaranjo = PartesUcenin[10].GetComponentInChildren<Renderer>().material.color;
+        Debug.Log(materialAzul + " | " + materialNaranjo);
+        AccionAux = -1;
         interaccion = -2;
         auxInteraccion = -2;
-        contador = 0;
+        MusicController.Instancia.StopMusic();
+        path = "Assets/Recursos Taller 2/Extras/";
 
     }
 
@@ -56,8 +75,6 @@ public class GameController : MonoBehaviour
 
             if(Physics.Raycast(ray, out hit, Distancia))
             {
-                //Debug.Log("cast " + contador);
-                contador++;
                 if (hit.collider != null)
                 {   
                     Debug.Log(hit.collider.name);
@@ -65,57 +82,129 @@ public class GameController : MonoBehaviour
                     {    
                         case "LeftHand":
                             interaccion = 0;
-                            MusicController.Instancia.ReproducirUcenin(0);
+                            GoAccion(0);
                             break;
                         case "RightHand":
                             interaccion = 1;        
-                            MusicController.Instancia.ReproducirUcenin(0);
+                            GoAccion(0);
                             break;
                         case "LeftFoot":
                             interaccion = 2;
-                            MusicController.Instancia.ReproducirUcenin(1);
+                            GoAccion(1);
                             break;
                         case "RightFoot":
                             interaccion = 3;
-                            MusicController.Instancia.ReproducirUcenin(1);
+                            GoAccion(1);
                             break;
                         case "LeftLeg":
                             interaccion = 4;
-                            MusicController.Instancia.ReproducirUcenin(2);
+                            GoAccion(2);
                             break;
                         case "RightLeg":
                             interaccion = 5;
-                            MusicController.Instancia.ReproducirUcenin(2);
+                            GoAccion(2);
                             break;
                         case "LeftArm":
                             interaccion = 6;
-                            MusicController.Instancia.ReproducirUcenin(3);
+                            GoAccion(3);
                             break;
                         case "RightArm":
                             interaccion = 7;
-                            MusicController.Instancia.ReproducirUcenin(3);
+                            GoAccion(3);
                             break;
                         case "Body":
                             interaccion = 8;
-                            MusicController.Instancia.ReproducirUcenin(4);
+                            GoAccion(4);
                             break;
                         case "Chest":
                             interaccion = 9;
-                            //CambiarColorCompleto(9);
-                            MusicController.Instancia.ReproducirUcenin(5);
+                            GoAccion(5);
                             break;
                         case "UIcon":
                             interaccion = 10;
-                            //CambiarColorCompleto(10);
-                            MusicController.Instancia.ReproducirUcenin(6);
                             break;
                     }
-                    CambiarColor(interaccion);
+                    CambiarColor();
                 } 
             }
         } 
     }
-    private void CambiarColor(int interaccion)
+
+    //Inicia una Accion dependiento de con que hayamos interactuado
+    private void GoAccion(int Accion)
+    {
+
+        if(AccionAux == Accion)
+        {
+            return;
+        }
+        if(AccionAux != -1)
+        {
+            StopAccion(AccionAux);
+        }
+        MusicController.Instancia.ReproducirUcenin(Accion);
+        switch(Accion)
+        {
+            case 0:
+                reader = new StreamReader(path + "Quien es Ucenin.txt");
+                TextUcenin.text = reader.ReadLine();
+                break;
+            case 1:
+                MapaUCN.SetActive(true);
+                break;
+            case 2:
+                reader = new StreamReader(path + "Velocidad teórica.txt");
+                TextUcenin.text = reader.ReadLine();
+                break;
+            case 3:
+                reader = new StreamReader(path + "Musculatura Ucenin.txt");
+                TextUcenin.text = reader.ReadLine();
+                break;
+            case 4:
+                reader = new StreamReader(path + "Coraza Ucenin.txt");
+                TextUcenin.text = reader.ReadLine();
+                break;
+            case 5:
+                reader = new StreamReader(path + "Esqueleto Reforzado.txt");
+                TextUcenin.text = reader.ReadLine();
+                break;
+            case 6:
+                break;
+
+        }
+        AccionAux = Accion;
+    }
+
+    //Para (O cancela) ciera accion.
+    private void StopAccion(int Accion)
+    {
+        switch(Accion)
+        {
+            case 0:
+                TextUcenin.text = "";
+                break;
+            case 1:
+                MapaUCN.SetActive(false);
+                break;
+            case 2:
+                TextUcenin.text = "";
+                break;
+            case 3:
+                TextUcenin.text = "";
+                break;
+            case 4:
+                TextUcenin.text = "";
+                break;
+            case 5:
+                TextUcenin.text = "";
+                break;
+            case 6:
+                break;  
+
+        }
+    }
+
+    private void CambiarColor()
     {
         if(interaccion == auxInteraccion)
         {
@@ -123,7 +212,7 @@ public class GameController : MonoBehaviour
         }
         if(interaccion > 8)
         {
-            CambiarColorCompleto(interaccion);
+            CambiarColorCompleto();
             return;
         }
         if(auxInteraccion == -2)
@@ -138,8 +227,16 @@ public class GameController : MonoBehaviour
                 {
                     foreach(Renderer render in PartesUcenin[auxInteraccion].GetComponentsInChildren<Renderer>())
                     {
-                        render.material.color = MaterialAux;
+                        render.material.color = materialNaranjo;
                     }
+                    NBackground.GetComponent<Renderer>().material.color = materialNaranjo;
+                    BackgroundCross.GetComponent<Renderer>().material.color = materialAzul;
+                    MiddleArrow.GetComponent<Renderer>().material.color = materialAzul;
+                    PartesUcenin[0].GetComponent<Renderer>().material.color = materialAzul;
+                    PartesUcenin[1].GetComponent<Renderer>().material.color = materialAzul;
+                    PartesUcenin[2].GetComponent<Renderer>().material.color = materialAzul;
+                    PartesUcenin[3].GetComponent<Renderer>().material.color = materialAzul;
+                    PartesUcenin[8].GetComponent<Renderer>().material.color = materialAzul;
                 }
                 else
                 {
@@ -159,7 +256,7 @@ public class GameController : MonoBehaviour
         this.auxInteraccion = interaccion;
     }
 
-    private void CambiarColorCompleto(int interaccion)
+    private void CambiarColorCompleto()
     {
         if(interaccion == auxInteraccion)
         {
@@ -170,7 +267,7 @@ public class GameController : MonoBehaviour
         {
             this.auxInteraccion = interaccion;
         }
-        
+
         if(interaccion != auxInteraccion)
         {
             if(this.auxInteraccion < 9)
@@ -183,8 +280,16 @@ public class GameController : MonoBehaviour
                 {
                     foreach(Renderer render in PartesUcenin[auxInteraccion].GetComponentsInChildren<Renderer>())
                     {
-                        render.material.color = MaterialAux;
+                        render.material.color = materialNaranjo;
                     }
+                    NBackground.GetComponent<Renderer>().material.color = materialNaranjo;
+                    BackgroundCross.GetComponent<Renderer>().material.color = materialAzul;
+                    MiddleArrow.GetComponent<Renderer>().material.color = materialAzul;
+                    PartesUcenin[0].GetComponent<Renderer>().material.color = materialAzul;
+                    PartesUcenin[1].GetComponent<Renderer>().material.color = materialAzul;
+                    PartesUcenin[2].GetComponent<Renderer>().material.color = materialAzul;
+                    PartesUcenin[3].GetComponent<Renderer>().material.color = materialAzul;
+                    PartesUcenin[8].GetComponent<Renderer>().material.color = materialAzul;
                 }
                 else
                 {
@@ -199,16 +304,22 @@ public class GameController : MonoBehaviour
         
         if(interaccion == 10)
         {
-            Debug.Log("Interaccion 10");
             this.MaterialAux = PartesUcenin[interaccion].GetComponentInChildren<Renderer>().material.color;    
             foreach(Renderer render in PartesUcenin[interaccion].GetComponentsInChildren<Renderer>())
             {
-                render.material.color = Color.green;
+                render.material.color = Color.magenta;
             }
+            NBackground.GetComponent<Renderer>().material.color = Color.magenta;
+            BackgroundCross.GetComponent<Renderer>().material.color = Color.magenta;
+            MiddleArrow.GetComponent<Renderer>().material.color = Color.magenta;
+            PartesUcenin[0].GetComponent<Renderer>().material.color = Color.magenta;
+            PartesUcenin[1].GetComponent<Renderer>().material.color = Color.magenta;
+            PartesUcenin[2].GetComponent<Renderer>().material.color = Color.magenta;
+            PartesUcenin[3].GetComponent<Renderer>().material.color = Color.magenta;    
+            PartesUcenin[8].GetComponent<Renderer>().material.color = Color.magenta;    
         }
         else
         {
-            Debug.Log("Interaccion 9");
             this.MaterialAux = PartesUcenin[interaccion].GetComponent<Renderer>().material.color;
             foreach(Renderer render in PartesChest)
             {

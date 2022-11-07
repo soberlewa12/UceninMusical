@@ -28,7 +28,8 @@ public class MusicController : MonoBehaviour
     }
 
     private void Start() 
-    {    
+    {   
+        mixer.SetFloat("MixerMusic", 0);
         mixer.SetFloat("MixerMaster", (PlayerPrefs.GetFloat("volumenMixer")*83 - 80));
     }
 
@@ -69,6 +70,10 @@ public class MusicController : MonoBehaviour
         {
             mixer.SetFloat("LowPassMusic", 22000.00f);
         }
+    }
+    public void StopMusic()
+    {
+        mixer.SetFloat("MixerMusic", -80);
     }
 
 }
