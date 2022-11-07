@@ -29,19 +29,19 @@ public class NameController : MonoBehaviour
         if((this.TextCuadro.text.Length - 1) >= 15)
         {
             TextAdvertencia.text = "El nombre no puede tener más de 15 caracteres.";
-            GameController.Instancia.setNombreIncorrecto(true);
+            MenuController.Instancia.setNombreIncorrecto(true);
             this.NombreIncorrecto = true;
         }
         else if ((this.TextCuadro.text.Length - 1) <= 3)
         {
             TextAdvertencia.text = "El nombre no puede tener menos de 3 caracteres.";
-            GameController.Instancia.setNombreIncorrecto(true);
+            MenuController.Instancia.setNombreIncorrecto(true);
             this.NombreIncorrecto = true;
         }
         else
         {
             TextAdvertencia.text = "";
-            GameController.Instancia.setNombreIncorrecto(false);
+            MenuController.Instancia.setNombreIncorrecto(false);
             PlayerPrefs.SetString("Nombre", this.TextCuadro.text);
             this.NombreIncorrecto = false;
         }

@@ -12,6 +12,7 @@ public class MusicController : MonoBehaviour
     [SerializeField] private AudioMixer mixer;
     [SerializeField] private AudioSource FxAudioSource;
     [SerializeField] private List<AudioClip> Fx;
+    [SerializeField] private List<AudioClip> FxUcenin;
 
     public void Awake() 
     {
@@ -50,6 +51,13 @@ public class MusicController : MonoBehaviour
     {
         this.FxAudioSource.clip = Fx[2];
         this.FxAudioSource.Play();
+    }
+
+    public void ReproducirUcenin(int index)
+    {
+        this.FxAudioSource.clip = FxUcenin[index];
+        this.FxAudioSource.Play();
+
     }
 
 }
