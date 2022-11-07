@@ -57,7 +57,18 @@ public class MusicController : MonoBehaviour
     {
         this.FxAudioSource.clip = FxUcenin[index];
         this.FxAudioSource.Play();
+    }
 
+    public void setLowPassMusic(bool Activo)
+    {
+        if(Activo)
+        {  
+            mixer.SetFloat("LowPassMusic", 1000.00f);
+        }
+        else
+        {
+            mixer.SetFloat("LowPassMusic", 22000.00f);
+        }
     }
 
 }

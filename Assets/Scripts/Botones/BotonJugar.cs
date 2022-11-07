@@ -8,12 +8,15 @@ public class BotonJugar : Boton
 {
 
     [SerializeField] private GameObject PanelEscogerSkin;
+    [SerializeField] GameObject Botones;
 
     override
     public void OnUp(){
 
         if(PlayerPrefs.GetString("Skin", "").Equals(""))
         {
+            Botones.SetActive(false);
+            MusicController.Instancia.setLowPassMusic(true);
             PanelEscogerSkin.SetActive(true);
         }
         else

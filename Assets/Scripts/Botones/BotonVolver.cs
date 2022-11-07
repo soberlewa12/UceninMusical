@@ -13,7 +13,6 @@ public class BotonVolver : Boton
     override
     public void OnUp(){
 
-
         MusicController.Instancia.BotonAtras();
         if(NameController.Instancia.getNombreIncorrecto())
         {

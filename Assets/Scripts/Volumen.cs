@@ -24,6 +24,7 @@ public class Volumen : MonoBehaviour
         mixer.SetFloat("MixerMaster", (slider.value*83 - 80));
     }
 
+
     public void SliderOnUp() 
     {
         PlayerPrefs.SetFloat("volumenMixer", slider.value);

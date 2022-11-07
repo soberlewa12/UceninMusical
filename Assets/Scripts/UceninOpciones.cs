@@ -10,8 +10,8 @@ public class UceninOpciones : MonoBehaviour
     [SerializeField] private GameObject otherSeleccion;
     [SerializeField] private GameObject Seleccion;
     [SerializeField] private GameObject Ucenin;
-    [SerializeField] private GameObject OpcionUceninIncognito;
     [SerializeField] private GameObject OpcionUcenin;
+    [SerializeField] private GameObject PanelDesconocida;
 
     private bool Exit;
     private bool seleccionado;
@@ -29,16 +29,9 @@ public class UceninOpciones : MonoBehaviour
         {
             OnClick();
         }
-
-        if(!MenuController.Instancia.getSkinEspecial() && Ucenin.name.Equals("UceninEspecial"))
-        {  
-            this.gameObject.transform.parent.gameObject.SetActive(false);
-            OpcionUceninIncognito.SetActive(true);
-        }
-        else if(MenuController.Instancia.getSkinEspecial() && Ucenin.name.Equals("UceninEspecial"))
+        else
         {
-            this.gameObject.transform.parent.gameObject.SetActive(true);
-            OpcionUceninIncognito.SetActive(false);
+            OnExit();
         }
     }
 
@@ -48,6 +41,7 @@ public class UceninOpciones : MonoBehaviour
         MusicController.Instancia.BotonEncima();
         if(Ucenin.name.Equals("UceninIncognito"))
         {
+            PanelDesconocida.SetActive(true);
             StartCoroutine(Rotar());
             return;
         }
@@ -106,6 +100,7 @@ public class UceninOpciones : MonoBehaviour
 
         if(Ucenin.name.Equals("UceninIncognito"))
         {
+            PanelDesconocida.SetActive(false);
             return;
         }
 

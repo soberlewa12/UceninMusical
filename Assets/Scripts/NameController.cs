@@ -8,20 +8,21 @@ public class NameController : MonoBehaviour
 
     public static NameController Instancia;
     [SerializeField] private TextMeshProUGUI TextAdvertencia;
-    [SerializeField] private TextMeshProUGUI TextCuadro;
+    [SerializeField] private TMP_InputField TextCuadro;
     [SerializeField] private TextMeshProUGUI PlaceHolder;
     private bool NombreIncorrecto;
 
 
     private void Start() 
     {
-        PlaceHolder.text = PlayerPrefs.GetString("Nombre");
+
+        TextCuadro.text = PlayerPrefs.GetString("Nombre");
         Instancia = this;
 
     }
     private void OnEnable() 
     {
-        PlaceHolder.text = PlayerPrefs.GetString("Nombre");
+        TextCuadro.text = PlayerPrefs.GetString("Nombre");
     }
 
     public void OnValueChanged()

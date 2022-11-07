@@ -4,15 +4,18 @@ using UnityEngine;
 
 public class UceninInGame : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public void setAspecto(string aspecto)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        switch(aspecto)
+        {
+            case "Estandar":
+                Debug.Log("Set Estandar en Ucenin");
+                
+                break;
+                
+            case "Especial":
+                Debug.Log("Set Especial en Ucenin");
+                break;
+        }
     }
 }

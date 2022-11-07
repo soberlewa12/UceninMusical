@@ -7,11 +7,14 @@ public class BotonAceptar : Boton
 {
 
     [SerializeField] private GameObject PanelToClose;
+    [SerializeField] GameObject Botones;
 
     override
     public void OnUp()
     {
+        MusicController.Instancia.setLowPassMusic(false);
         MusicController.Instancia.BotonClick();
+        Botones.SetActive(true);
         PanelToClose.SetActive(false);
     }
 
