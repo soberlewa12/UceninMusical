@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Audio;
 
-public class Volumen : MonoBehaviour
+public class VolumenSlider : MonoBehaviour
 {
 
     [SerializeField] private GameObject MuteGameObject;
@@ -14,20 +14,22 @@ public class Volumen : MonoBehaviour
 
     void Start()
     {
-        slider.value = PlayerPrefs.GetFloat("volumenMixer");
-        mixer.SetFloat("MixerMaster", (slider.value*83 - 80));
-        SliderOnUp();
+    }
+    private void OnEnable() 
+    {
+        slider.value = PlayerPrefs.GetFloat("Slider", 0.0f);
     }
 
     public void ChangeSlider() 
     {
-        mixer.SetFloat("MixerMaster", (slider.value*83 - 80));
+        MusicController.Instancia.CambiarVolumen(slider.value);
     }
 
 
     public void SliderOnUp() 
     {
-        PlayerPrefs.SetFloat("volumenMixer", slider.value);
+
+        MusicController.Instancia.CambiarVolumen(slider.value);
 
         if (slider.value == 0.3f)
         {

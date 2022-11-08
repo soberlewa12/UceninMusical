@@ -19,25 +19,44 @@ public class GameController : MonoBehaviour
     //10. 
 
     public static GameController Instancia;
+
+    //Referencias a los objetos de Ucenin.
     [SerializeField] GameObject[] PartesUcenin;
+    [SerializeField] GameObject[] PartesUceninEspecial;
     [SerializeField] Renderer[] PartesChest;
+    [SerializeField] Renderer[] PartesChestEspecial;
     [SerializeField] GameObject NBackground;
     [SerializeField] GameObject BackgroundCross;
     [SerializeField] GameObject MiddleArrow;
+    [SerializeField] GameObject NBackgroundEspecial;
+    [SerializeField] GameObject BackgroundCrossEspecial;
+    [SerializeField] GameObject MiddleArrowEspecial;
+    [SerializeField] GameObject Ucenin;
+    [SerializeField] GameObject UceninEspecial;
 
+    //Referencias a distintas interacciones que pueden aparecer.
     [SerializeField] TextMeshPro TextUcenin;
     [SerializeField] GameObject MapaUCN;
+    [SerializeField] GameObject TrucoDesbloqueado;
+
+    //Para cambiar el color de Ucenin.
     private int interaccion;
     private int auxInteraccion;
     private Color MaterialAux;
 
+    //Para generar texto
     private int AccionAux;
     private StreamReader reader;
     private string path;
     private string Textpath;
 
+    //Referencia a los colores de Ucenin. No necesariamente son los colores Azul y naranja.
     private Color materialAzul;
     private Color materialNaranjo;
+
+    //Para Desbloquear el aspecto desconocido de Ucenin.
+    private string ConcatenacionAcciones;
+    private string ConcatenacionAccionesCompletas;
 
     private void Awake() 
     {
@@ -51,22 +70,52 @@ public class GameController : MonoBehaviour
         }
     }
 
-    private void Start() {
-    
+    private void Start() 
+    {    
+        MusicController.Instancia.stopMusic();
+        
+        if(PlayerPrefs.GetString("Skin", "").Equals("UceninEspecial"))
+        {
+            UceninEspecial.SetActive(true);
+            Ucenin.SetActive(false);
+            PartesUcenin = PartesUceninEspecial;
+            NBackground = NBackgroundEspecial;
+            BackgroundCross = BackgroundCrossEspecial;
+            MiddleArrow = MiddleArrowEspecial;
+        }
+        else
+        {
+            Ucenin.SetActive(true);
+            UceninEspecial.SetActive(false);
+        }
+
         materialAzul = PartesUcenin[8].GetComponent<Renderer>().material.color;
         materialNaranjo = PartesUcenin[10].GetComponentInChildren<Renderer>().material.color;
-        Debug.Log(materialAzul + " | " + materialNaranjo);
-        AccionAux = -1;
-        interaccion = -2;
-        auxInteraccion = -2;
-        MusicController.Instancia.StopMusic();
+
+        AccionAux = -1;         //Si AccionAux = -1, significa que es la primera accion realizada.      
+        auxInteraccion = -2;    //Si auxInteraccion = -2, Significa que es la primera accion realiazada sobre una parte especifica de ucenin.
+
         path = "Assets/Recursos Taller 2/Extras/";
 
+        ConcatenacionAccionesCompletas = "0123456";
+
+        /* PartesUcenin[0] = Ucenin.transform.GetChild(5).GetChild(0).gameObject;
+        PartesUcenin[1] = Ucenin.transform.GetChild(6).GetChild(0).gameObject;
+        PartesUcenin[2] = Ucenin.transform.GetChild(4).gameObject;
+        PartesUcenin[3] = Ucenin.transform.GetChild(3).gameObject;
+        PartesUcenin[4] = Ucenin.transform.GetChild(1).gameObject;
+        PartesUcenin[5] = Ucenin.transform.GetChild(2).gameObject;
+        PartesUcenin[6] = Ucenin.transform.GetChild(5).gameObject;
+        PartesUcenin[7] = Ucenin.transform.GetChild(6).gameObject;
+        PartesUcenin[8] = Ucenin.transform.GetChild(0).gameObject;
+        PartesUcenin[9] = Ucenin.transform.GetChild(0).GetChild(0).gameObject;
+        PartesUcenin[10] = Ucenin.transform.GetChild(0).GetChild(3).gameObject; */
+        
     }
 
-    private void FixedUpdate() 
+    private void Update() 
     {
-       if(Input.GetMouseButton(0))
+       if(Input.GetMouseButtonDown(0))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
@@ -122,6 +171,7 @@ public class GameController : MonoBehaviour
                             break;
                         case "UIcon":
                             interaccion = 10;
+                            GoAccion(6);
                             break;
                     }
                     CambiarColor();
@@ -130,10 +180,50 @@ public class GameController : MonoBehaviour
         } 
     }
 
+    //Verificamos si hemos realizado todas las interaccion posibles.
+    private void VerificarAcciones()
+    {
+        if(PlayerPrefs.GetInt("SkinDesbloqueada", 0) == 1)
+        {
+            return;
+        }
+
+        foreach(char numero in ConcatenacionAccionesCompletas.ToCharArray())
+        {
+
+            foreach(char numeroAux in ConcatenacionAcciones.ToCharArray())
+            {
+                Debug.Log("[" + numeroAux + "][" + numero + "]");
+                if(numero.Equals(numeroAux))
+                {
+                    Debug.Log("asdasdad");
+                    goto next;
+                }
+            }
+            return;
+            next:
+            continue;
+        }
+
+        MusicController.Instancia.BotonEncima();
+        Debug.Log(PlayerPrefs.GetFloat("Slider"));
+        PlayerPrefs.SetInt("SkinDesbloqueada", 1);
+        ConcatenacionAccionesCompletas = "";
+        StartCoroutine(TrucoActivadoE());
+    }
+
+    IEnumerator TrucoActivadoE()
+    {
+        TrucoDesbloqueado.SetActive(true);
+        yield return new WaitForSeconds(4);
+        TrucoDesbloqueado.SetActive(false);
+    }
+
     //Inicia una Accion dependiento de con que hayamos interactuado
     private void GoAccion(int Accion)
     {
-
+        ConcatenacionAcciones = ConcatenacionAcciones + Accion;
+        VerificarAcciones();
         if(AccionAux == Accion)
         {
             return;
@@ -142,7 +232,7 @@ public class GameController : MonoBehaviour
         {
             StopAccion(AccionAux);
         }
-        MusicController.Instancia.ReproducirUcenin(Accion);
+        MusicController.Instancia.ReproducirUceninSonido(Accion);
         switch(Accion)
         {
             case 0:

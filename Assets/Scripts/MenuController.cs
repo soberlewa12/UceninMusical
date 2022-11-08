@@ -9,7 +9,6 @@ public class MenuController : MonoBehaviour
     [SerializeField] GameObject OpcionUceninIncognito; 
     public static MenuController Instancia;
     private bool NombreIncorrecto;
-    private bool SkinEspecial;
 
     private void Awake() 
     {
@@ -23,8 +22,10 @@ public class MenuController : MonoBehaviour
             Instancia = this;
         }
     }
+
     private void Start() 
     {
+        MusicController.Instancia.PlayMusic();
         if(PlayerPrefs.GetInt("SkinDesbloqueada", 0) == 1)
         {  
             OpcionUceninEspecial.SetActive(true);
@@ -34,8 +35,7 @@ public class MenuController : MonoBehaviour
         {
             OpcionUceninEspecial.SetActive(false);
             OpcionUceninIncognito.SetActive(true);
-        }
-              
+        } 
     }
 
     public void setNombreIncorrecto(bool NombreIncorrecto)
@@ -46,15 +46,5 @@ public class MenuController : MonoBehaviour
     public bool getNombreIncorrecto()
     {
         return this.NombreIncorrecto;
-    }
-
-    public void setSkinEspecial(bool SkinEspecial)
-    {
-        this.SkinEspecial = SkinEspecial;
-    }
-
-    public bool getSkinEspecial()
-    {
-        return this.SkinEspecial;
     }
 }

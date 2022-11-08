@@ -8,10 +8,11 @@ public class UceninOpciones : MonoBehaviour
 {
 
     [SerializeField] private GameObject otherSeleccion;
-    [SerializeField] private GameObject Seleccion;
+    [SerializeField] private GameObject SeleccionPanel;
+    [SerializeField] private GameObject ClickPanel;
     [SerializeField] private GameObject Ucenin;
-    [SerializeField] private GameObject OpcionUcenin;
     [SerializeField] private GameObject PanelDesconocida;
+    [SerializeField] private GameObject UceninEspecial;
 
     private bool Exit;
     private bool seleccionado;
@@ -21,11 +22,19 @@ public class UceninOpciones : MonoBehaviour
 
     private void Start() 
     {
+        Debug.Log(PlayerPrefs.GetInt("SkinDesbloqueada", 0));
+        if(PlayerPrefs.GetInt("SkinDesbloqueada", 0) == 1)
+        {
+            if(Ucenin.Equals("UceninIncognito"))
+            {
+                UceninEspecial.SetActive(true);
+                this.gameObject.SetActive(false);
+            }
+        }
+
         this.Exit = false;
         contRotaciones = 0;
         seleccionado = false;
-        Debug.Log(Ucenin.name);
-        Debug.Log(PlayerPrefs.GetString("Skin", "")  + "Skin");
 
         if(PlayerPrefs.GetString("Skin", "").Equals(Ucenin.name))
         {
@@ -48,19 +57,20 @@ public class UceninOpciones : MonoBehaviour
             return;
         }
 
-        if(!this.Seleccion.activeSelf)
+        if(!this.ClickPanel.activeSelf)
         {
             seleccionado = false;
         }
 
         StartCoroutine(Rotar());
-        Seleccion.SetActive(true);
+        SeleccionPanel.SetActive(true);
     }
 
     public void OnClick()
     {
         if(Ucenin.name.Equals("UceninIncognito"))
         {
+            MusicController.Instancia.BotonAtras();
             return;
         }
 
@@ -69,15 +79,18 @@ public class UceninOpciones : MonoBehaviour
             PlayerPrefs.SetString("Skin", "");
     
             seleccionado = false;
-            this.Seleccion.SetActive(false);
+            
+            this.ClickPanel.SetActive(false);
+            this.SeleccionPanel.SetActive(true);
         }
         else
         {
             PlayerPrefs.SetString("Skin", Ucenin.name);
             
             seleccionado = true;
-            this.Seleccion.SetActive(true);
+            this.ClickPanel.SetActive(true);
             otherSeleccion.SetActive(false);
+            this.SeleccionPanel.SetActive(false);
         }
         MusicController.Instancia.BotonClick();
     }
@@ -108,7 +121,7 @@ public class UceninOpciones : MonoBehaviour
 
         if(!seleccionado)
         {
-            Seleccion.SetActive(false);
+            SeleccionPanel.SetActive(false);
         }
     }
 }
