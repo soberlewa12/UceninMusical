@@ -313,6 +313,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6569216485355225220, guid: cfb8431581b1e454fa62f268bf248916, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cfb8431581b1e454fa62f268bf248916, type: 3}
 --- !u!4 &78921212 stripped
@@ -1429,8 +1433,8 @@ GameObject:
   - component: {fileID: 1618688840}
   - component: {fileID: 1618688839}
   - component: {fileID: 1618688838}
-  - component: {fileID: 1618688841}
   - component: {fileID: 1618688842}
+  - component: {fileID: 1618688843}
   m_Layer: 0
   m_Name: ImageTarget
   m_TagString: Untagged
@@ -1519,7 +1523,7 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 1618688841}
+  mPreview: {fileID: 1618688843}
 --- !u!4 &1618688840
 Transform:
   m_ObjectHideFlags: 0
@@ -1539,7 +1543,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1618688841
+--- !u!114 &1618688842
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1618688836}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5bbd13d3f0a7cda4084f1a8c6a4ce6d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1618688843
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1558,18 +1574,6 @@ MonoBehaviour:
   mCastedBehaviour: {fileID: 1618688839}
   mMeshFilter: {fileID: 0}
   mMeshRenderer: {fileID: 0}
---- !u!114 &1618688842
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1618688836}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5bbd13d3f0a7cda4084f1a8c6a4ce6d9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &1688206671 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6569216485192967547, guid: cfb8431581b1e454fa62f268bf248916, type: 3}
@@ -1845,6 +1849,10 @@ PrefabInstance:
     - target: {fileID: 6569216485192967544, guid: cfb8431581b1e454fa62f268bf248916, type: 3}
       propertyPath: m_Name
       value: Ucenin
+      objectReference: {fileID: 0}
+    - target: {fileID: 6569216485192967544, guid: cfb8431581b1e454fa62f268bf248916, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6569216485192967547, guid: cfb8431581b1e454fa62f268bf248916, type: 3}
       propertyPath: m_RootOrder

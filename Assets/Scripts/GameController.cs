@@ -79,6 +79,7 @@ public class GameController : MonoBehaviour
             UceninEspecial.SetActive(true);
             Ucenin.SetActive(false);
             PartesUcenin = PartesUceninEspecial;
+            PartesChest = PartesChestEspecial;
             NBackground = NBackgroundEspecial;
             BackgroundCross = BackgroundCrossEspecial;
             MiddleArrow = MiddleArrowEspecial;
@@ -410,6 +411,8 @@ public class GameController : MonoBehaviour
         }
         else
         {
+            Debug.Log("Interaccion : " + interaccion);
+            Debug.Log("Nombre: " + PartesUcenin[interaccion].name);
             this.MaterialAux = PartesUcenin[interaccion].GetComponent<Renderer>().material.color;
             foreach(Renderer render in PartesChest)
             {
