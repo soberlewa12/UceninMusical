@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using System.IO;
+using UnityEngine.UI;
 
 public class GameController : MonoBehaviour
 {
@@ -34,10 +35,15 @@ public class GameController : MonoBehaviour
     [SerializeField] GameObject Ucenin;
     [SerializeField] GameObject UceninEspecial;
 
+    [SerializeField] GameObject ARCamera;
+
     //Referencias a distintas interacciones que pueden aparecer.
     [SerializeField] TextMeshPro TextUcenin;
     [SerializeField] GameObject MapaUCN;
     [SerializeField] GameObject TrucoDesbloqueado;
+
+    [SerializeField] private  GameObject StopVideo;
+    private Color BackgroundColor;
 
     //Para cambiar el color de Ucenin.
     private int interaccion;
@@ -58,6 +64,8 @@ public class GameController : MonoBehaviour
     private string ConcatenacionAcciones;
     private string ConcatenacionAccionesCompletas;
 
+    private bool GameOnPause;
+
     private void Awake() 
     {
         if(Instancia != null)
@@ -72,7 +80,9 @@ public class GameController : MonoBehaviour
 
     private void Start() 
     {    
-        MusicController.Instancia.stopMusic();
+        Application.targetFrameRate = 90;
+        MusicController.Instancia.PauseAudioSource(MusicController.Instancia.MusicAudioSource);
+        MusicController.Instancia.CambiarVolumen(0, false);
         
         if(PlayerPrefs.GetString("Skin", "").Equals("UceninEspecial"))
         {
@@ -114,10 +124,39 @@ public class GameController : MonoBehaviour
         
     }
 
+    public void StopGame()
+    {
+        MusicController.Instancia.setLowPassMusic(true);
+        MusicController.Instancia.PauseAudioSource(MusicController.Instancia.FxAudioSourceUcenin);
+        MusicController.Instancia.UnpauseAudioSource(MusicController.Instancia.MusicAudioSource);
+        MusicController.Instancia.FadeInMusicVoid();
+        GameOnPause = true;
+        /* Debug.Log("Inicio");
+        Texture2D sprites = ScreenCapture.CaptureScreenshotAsTexture();
+
+        Rect rec = new Rect(0, 0, sprites. width, sprites. height);
+        StopVideo.GetComponent<Image>().sprite = Sprite.Create(sprites,rec,new Vector2(0,0),1);
+        ARCamera.transform.GetChild(0).GetComponent<MonoBehaviour>().enabled = false;
+        Debug.Log("Inicio"); */
+    }
+    
+    public void ResumeGame()
+    {
+        MusicController.Instancia.setLowPassMusic(false);
+        MusicController.Instancia.PauseAudioSource(MusicController.Instancia.MusicAudioSource);
+        GameOnPause = false;
+        /* ARCamera.transform.GetChild(0).GetComponent<MonoBehaviour>().enabled = true; */
+    }
+
+
     private void Update() 
     {
        if(Input.GetMouseButtonDown(0))
         {
+            if(GameOnPause)
+            {
+                return;
+            }
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
             float Distancia = 100f;

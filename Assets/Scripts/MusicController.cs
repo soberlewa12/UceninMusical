@@ -10,9 +10,9 @@ public class MusicController : MonoBehaviour
     public static MusicController Instancia;
 
     [SerializeField] private AudioMixer mixer;
-    [SerializeField] private AudioSource MusicAudioSource;
-    [SerializeField] private AudioSource FxAudioSource;
-    [SerializeField] private AudioSource FxAudioSourceUcenin;
+    [SerializeField] public AudioSource MusicAudioSource;
+    [SerializeField] public AudioSource FxAudioSource;
+    [SerializeField] public AudioSource FxAudioSourceUcenin;
     [SerializeField] private List<AudioClip> Fx;
     [SerializeField] private List<AudioClip> FxUcenin;
 
@@ -41,14 +41,18 @@ public class MusicController : MonoBehaviour
         {   
             Debug.Log("Entrando a escena Juego");
             MusicAudioSource.Stop();
-            StartCoroutine(FadeInMusic(PlayerPrefs.GetFloat("Slider", 0.0f)/10));
         }
-        CambiarVolumen(PlayerPrefs.GetFloat("Slider", 0.0f));
+        CambiarVolumen(PlayerPrefs.GetFloat("Slider", 0.0f), true);
     }
 
-    public void CambiarVolumen(float volumen)
+    public void CambiarVolumen(float volumen, bool CambiarSlider)
     {
-        PlayerPrefs.SetFloat("Slider", volumen);
+        Debug.Log("CambiarSlider: " + CambiarSlider + " Valor: " + volumen);
+        if(CambiarSlider)
+        {   
+            Debug.Log("Entrando a cambiar slider");
+            PlayerPrefs.SetFloat("Slider", volumen);
+        } 
         mixer.SetFloat("MixerMaster", volumen*83- 80);
     }
 
@@ -91,28 +95,40 @@ public class MusicController : MonoBehaviour
         }
     }
 
-    public void stopMusic()
+    public void PauseAudioSource(AudioSource audioSoruce)
     {
-        MusicAudioSource.Stop();
+        audioSoruce.Pause();
     }
 
-    public void PlayMusic()
+    public void UnpauseAudioSource(AudioSource audioSource)
     {
-        FxAudioSourceUcenin.Stop();
-        MusicAudioSource.Play();
+        audioSource.UnPause();
+        //FadeInMusic(PlayerPrefs.GetFloat("Slider", 0.0f), PlayerPrefs.GetFloat("Slider", 0.0f)/10);
     }
 
-    IEnumerator FadeInMusic(float divisiones)
+    public void FadeInMusicVoid()
     {
-        CambiarVolumen(divisiones);
+
+        StartCoroutine(FadeInMusic(PlayerPrefs.GetFloat("Slider", 0)/10, PlayerPrefs.GetFloat("Slider", 0), PlayerPrefs.GetFloat("Slider", 0)/10, 1));
+    }
+
+    public IEnumerator FadeInMusic(float divisiones, float originalSlider,float originalDivision, int contDivision)
+    {
+        Debug.Log("Division: " + divisiones + " player Slider: " + PlayerPrefs.GetFloat("Slider") + " slider: " + originalSlider);
+        contDivision++;
+        CambiarVolumen(divisiones, false);
+        Debug.Log("Antes ");
         yield return new WaitForSeconds(0.1f);
-        if(PlayerPrefs.GetFloat("Slider", 0.0f) < divisiones*10)
+        Debug.Log("Despues ");
+        if(originalSlider > divisiones)
         {
-            FadeInMusic(divisiones + divisiones);
+            Debug.Log("Iniciando");
+            StartCoroutine(FadeInMusic((originalDivision*contDivision), originalSlider, originalDivision, contDivision));
         }
         else
         {
-            CambiarVolumen(divisiones*10);
+            Debug.Log("Entrando");
+            CambiarVolumen(originalSlider, false);
         }
     }
 }

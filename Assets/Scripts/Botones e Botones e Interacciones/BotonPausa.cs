@@ -11,9 +11,9 @@ public class BotonPausa : Boton
     override
     public void OnUp()
     {
-        Time.timeScale = 0f;
+        GameController.Instancia.StopGame();
+        //Time.timeScale = 0f;
         PanelToOpen.SetActive(true);
         PanelToClose.SetActive(false);
     }
-    
 }

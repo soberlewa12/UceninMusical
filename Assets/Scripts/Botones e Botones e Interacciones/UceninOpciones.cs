@@ -48,6 +48,7 @@ public class UceninOpciones : MonoBehaviour
 
     public void OnEnter()
     {
+        Debug.Log("On Enter");
         this.Exit = false;
         MusicController.Instancia.BotonEncima();
         if(Ucenin.name.Equals("UceninIncognito"))
@@ -61,9 +62,12 @@ public class UceninOpciones : MonoBehaviour
         {
             seleccionado = false;
         }
+        else
+        {
+            SeleccionPanel.SetActive(true);
+        }
 
         StartCoroutine(Rotar());
-        SeleccionPanel.SetActive(true);
     }
 
     public void OnClick()
@@ -99,16 +103,17 @@ public class UceninOpciones : MonoBehaviour
     {
         contRotaciones++;
         Ucenin.transform.Rotate(new Vector3(0, 0, 10));
-        yield return new WaitForSeconds(0.04f);
-
+        yield return new WaitForSeconds(0.04f);     
         if(!this.Exit)
         {
+            Debug.Log("Rotando Nuevamente");
             StartCoroutine(Rotar());            
         }
     }
 
     public void OnExit()
     {
+        Debug.Log("On Exit");
         Ucenin.transform.Rotate(new Vector3(0, 0, -(contRotaciones*10)));
         this.Exit = true;
         contRotaciones = 0;

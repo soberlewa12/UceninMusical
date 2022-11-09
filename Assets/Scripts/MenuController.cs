@@ -25,7 +25,11 @@ public class MenuController : MonoBehaviour
 
     private void Start() 
     {
-        MusicController.Instancia.PlayMusic();
+        Time.timeScale = 1f;
+        //MusicController.Instancia.setLowPassMusic(false);
+        //MusicController.Instancia.UnpauseAudioSource(MusicController.Instancia.MusicAudioSource);
+        //StartCoroutine(MusicController.Instancia.FadeInMusic((PlayerPrefs.GetFloat("Slider", 0.0f)/10), PlayerPrefs.GetFloat("Slider", 0f)));
+        //MusicController.Instancia.setLowPassMusic(false);
         if(PlayerPrefs.GetInt("SkinDesbloqueada", 0) == 1)
         {  
             OpcionUceninEspecial.SetActive(true);
@@ -38,7 +42,7 @@ public class MenuController : MonoBehaviour
         } 
     }
 
-    public void setNombreIncorrecto(bool NombreIncorrecto)
+    /* public void setNombreIncorrecto(bool NombreIncorrecto)
     {
         this.NombreIncorrecto = NombreIncorrecto;
     }
@@ -46,5 +50,5 @@ public class MenuController : MonoBehaviour
     public bool getNombreIncorrecto()
     {
         return this.NombreIncorrecto;
-    }
+    } */
 }
