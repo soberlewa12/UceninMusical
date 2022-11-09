@@ -51,6 +51,7 @@ public class UceninOpciones : MonoBehaviour
         Debug.Log("On Enter");
         this.Exit = false;
         MusicController.Instancia.BotonEncima();
+
         if(Ucenin.name.Equals("UceninIncognito"))
         {
             PanelDesconocida.SetActive(true);
@@ -60,13 +61,11 @@ public class UceninOpciones : MonoBehaviour
 
         if(!this.ClickPanel.activeSelf)
         {
-            seleccionado = false;
-        }
-        else
-        {
+            Debug.Log("Entrando Seleccionado");
             SeleccionPanel.SetActive(true);
         }
-
+        Debug.Log("Luegp");
+        seleccionado = true;
         StartCoroutine(Rotar());
     }
 
@@ -78,11 +77,11 @@ public class UceninOpciones : MonoBehaviour
             return;
         }
 
-        if(seleccionado)
+        if(this.ClickPanel.activeSelf)
         {
             PlayerPrefs.SetString("Skin", "");
     
-            seleccionado = false;
+            //seleccionado = false;
             
             this.ClickPanel.SetActive(false);
             this.SeleccionPanel.SetActive(true);
@@ -91,7 +90,7 @@ public class UceninOpciones : MonoBehaviour
         {
             PlayerPrefs.SetString("Skin", Ucenin.name);
             
-            seleccionado = true;
+            //seleccionado = true;
             this.ClickPanel.SetActive(true);
             otherSeleccion.SetActive(false);
             this.SeleccionPanel.SetActive(false);
@@ -117,6 +116,7 @@ public class UceninOpciones : MonoBehaviour
         Ucenin.transform.Rotate(new Vector3(0, 0, -(contRotaciones*10)));
         this.Exit = true;
         contRotaciones = 0;
+        seleccionado = false;
 
         if(Ucenin.name.Equals("UceninIncognito"))
         {
@@ -124,7 +124,7 @@ public class UceninOpciones : MonoBehaviour
             return;
         }
 
-        if(!seleccionado)
+        if(!this.ClickPanel.activeSelf)
         {
             SeleccionPanel.SetActive(false);
         }

@@ -16,6 +16,10 @@ public class MusicController : MonoBehaviour
     [SerializeField] private List<AudioClip> Fx;
     [SerializeField] private List<AudioClip> FxUcenin;
 
+    private float VolumenMusic;
+    private bool FadeInMusicIsOn;
+    private bool FadeOutMusicIsOn;
+
     public void Awake() 
     {
         Debug.Log("Awake Music Controller");
@@ -42,10 +46,11 @@ public class MusicController : MonoBehaviour
             Debug.Log("Entrando a escena Juego");
             MusicAudioSource.Stop();
         }
-        CambiarVolumen(PlayerPrefs.GetFloat("Slider", 0.0f), true);
+        VolumenMusic = PlayerPrefs.GetFloat("Slider", 0.0f);
+        CambiarVolumenMixer(PlayerPrefs.GetFloat("Slider", 0.0f), true);
     }
 
-    public void CambiarVolumen(float volumen, bool CambiarSlider)
+    public void CambiarVolumenMixer(float volumen, bool CambiarSlider)
     {
         Debug.Log("CambiarSlider: " + CambiarSlider + " Valor: " + volumen);
         if(CambiarSlider)
@@ -54,6 +59,13 @@ public class MusicController : MonoBehaviour
             PlayerPrefs.SetFloat("Slider", volumen);
         } 
         mixer.SetFloat("MixerMaster", volumen*83- 80);
+    }
+
+    public void CambiarVolumenMusic(float volumen)
+    {
+        Debug.Log("volumeen de audioSource musica" + MusicAudioSource.volume);
+        VolumenMusic = volumen;
+        mixer.SetFloat("MixerMusic", VolumenMusic*83 - 80);
     }
 
     //Sonido cuando pasamos el cursor por encima
@@ -100,35 +112,65 @@ public class MusicController : MonoBehaviour
         audioSoruce.Pause();
     }
 
-    public void UnpauseAudioSource(AudioSource audioSource)
+    public void UnpauseAudioSource(AudioSource audioSource, bool mode)
     {
-        audioSource.UnPause();
+        if(mode)
+        {
+            FadeInMusicIsOn = true;
+        }
+        else
+        {
+            FadeOutMusicIsOn = true;
+        }
+        FadeInMusicVoid(mode);
+        StartCoroutine(espera(audioSource));
         //FadeInMusic(PlayerPrefs.GetFloat("Slider", 0.0f), PlayerPrefs.GetFloat("Slider", 0.0f)/10);
     }
-
-    public void FadeInMusicVoid()
+    public void stopUceninFx()
     {
-
-        StartCoroutine(FadeInMusic(PlayerPrefs.GetFloat("Slider", 0)/10, PlayerPrefs.GetFloat("Slider", 0), PlayerPrefs.GetFloat("Slider", 0)/10, 1));
+        FxAudioSourceUcenin.Stop();
     }
 
-    public IEnumerator FadeInMusic(float divisiones, float originalSlider,float originalDivision, int contDivision)
+    public void FadeInMusicVoid(bool mode)
     {
+        StartCoroutine(Fade(VolumenMusic/10, VolumenMusic, VolumenMusic/10, 0, mode));
+    }
+
+    public IEnumerator espera(AudioSource audioSource)
+    {
+        CambiarVolumenMixer(0, false);
+        yield return new WaitForSeconds(0.1f);
+        audioSource.UnPause();
+        CambiarVolumenMixer(PlayerPrefs.GetFloat("Slider", 0f), false);
+    }
+
+    public IEnumerator Fade(float divisiones, float originalSlider,float originalDivision, int contDivision, bool mode)
+    {
+        float volumen = mode ? divisiones : originalSlider - divisiones;
+
         Debug.Log("Division: " + divisiones + " player Slider: " + PlayerPrefs.GetFloat("Slider") + " slider: " + originalSlider);
         contDivision++;
-        CambiarVolumen(divisiones, false);
+        CambiarVolumenMusic(volumen);
         Debug.Log("Antes ");
         yield return new WaitForSeconds(0.1f);
         Debug.Log("Despues ");
         if(originalSlider > divisiones)
         {
             Debug.Log("Iniciando");
-            StartCoroutine(FadeInMusic((originalDivision*contDivision), originalSlider, originalDivision, contDivision));
+            StartCoroutine(Fade((originalDivision*contDivision), originalSlider, originalDivision, contDivision, true));
         }
         else
         {
+            if(mode)
+            {
+                FadeOutMusicIsOn = false;
+            }
+            else
+            {
+                FadeInMusicIsOn = true;
+            }
             Debug.Log("Entrando");
-            CambiarVolumen(originalSlider, false);
+            CambiarVolumenMusic(originalSlider);
         }
     }
 }

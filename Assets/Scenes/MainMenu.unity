@@ -3327,7 +3327,7 @@ AudioSource:
   m_GameObject: {fileID: 653186901}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: -5780033494143218878, guid: 6da653f25c82e524a97708646fc9fbbb, type: 2}
+  OutputAudioMixerGroup: {fileID: 882749822359361415, guid: 6da653f25c82e524a97708646fc9fbbb, type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
   m_Volume: 1
@@ -7783,7 +7783,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2082075233
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7824,7 +7824,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: El nombre No puede tener menos de 3 caracteres
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f8343be30deea524d884041cbb1ed5ef, type: 2}
   m_sharedMaterial: {fileID: 2793017189853816695, guid: f8343be30deea524d884041cbb1ed5ef, type: 2}

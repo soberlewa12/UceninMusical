@@ -22,13 +22,13 @@ public class VolumenSlider : MonoBehaviour
 
     public void ChangeSlider() 
     {
-        MusicController.Instancia.CambiarVolumen(slider.value, true);
+        MusicController.Instancia.CambiarVolumenMixer(slider.value, true);
     }
 
 
     public void SliderOnUp() 
     {
-        MusicController.Instancia.CambiarVolumen(slider.value, true);
+        MusicController.Instancia.CambiarVolumenMixer(slider.value, true);
 
         if (slider.value == 0.3f)
         {

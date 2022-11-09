@@ -4,6 +4,7 @@ using UnityEngine;
 using TMPro;
 using System.IO;
 using UnityEngine.UI;
+using System.Windows.Input;
 
 public class GameController : MonoBehaviour
 {
@@ -49,6 +50,13 @@ public class GameController : MonoBehaviour
     private int interaccion;
     private int auxInteraccion;
     private Color MaterialAux;
+    private int cantInteracciones;
+    private int cantInteraccionesAux;
+    private List<int> ordenIntracciones;
+    private float duracion;
+    private float time1;
+    private float time2;
+    private float timeAux;
 
     //Para generar texto
     private int AccionAux;
@@ -65,7 +73,9 @@ public class GameController : MonoBehaviour
     private string ConcatenacionAccionesCompletas;
 
     private bool GameOnPause;
-
+    private bool anotherInteractionSelected;
+    private bool InteractionIsOn;
+    
     private void Awake() 
     {
         if(Instancia != null)
@@ -82,7 +92,7 @@ public class GameController : MonoBehaviour
     {    
         Application.targetFrameRate = 90;
         MusicController.Instancia.PauseAudioSource(MusicController.Instancia.MusicAudioSource);
-        MusicController.Instancia.CambiarVolumen(0, false);
+        //MusicController.Instancia.CambiarVolumen(0, false);
         
         if(PlayerPrefs.GetString("Skin", "").Equals("UceninEspecial"))
         {
@@ -105,6 +115,11 @@ public class GameController : MonoBehaviour
 
         AccionAux = -1;         //Si AccionAux = -1, significa que es la primera accion realizada.      
         auxInteraccion = -2;    //Si auxInteraccion = -2, Significa que es la primera accion realiazada sobre una parte especifica de ucenin.
+        cantInteracciones = 0;
+        ordenIntracciones = new List<int>();
+        time1 = 0;
+        time2 = 0;
+
 
         path = "Assets/Recursos Taller 2/Extras/";
 
@@ -128,26 +143,82 @@ public class GameController : MonoBehaviour
     {
         MusicController.Instancia.setLowPassMusic(true);
         MusicController.Instancia.PauseAudioSource(MusicController.Instancia.FxAudioSourceUcenin);
-        MusicController.Instancia.UnpauseAudioSource(MusicController.Instancia.MusicAudioSource);
-        MusicController.Instancia.FadeInMusicVoid();
+        MusicController.Instancia.UnpauseAudioSource(MusicController.Instancia.MusicAudioSource, true);
         GameOnPause = true;
-        /* Debug.Log("Inicio");
-        Texture2D sprites = ScreenCapture.CaptureScreenshotAsTexture();
-
-        Rect rec = new Rect(0, 0, sprites. width, sprites. height);
-        StopVideo.GetComponent<Image>().sprite = Sprite.Create(sprites,rec,new Vector2(0,0),1);
-        ARCamera.transform.GetChild(0).GetComponent<MonoBehaviour>().enabled = false;
-        Debug.Log("Inicio"); */
     }
     
     public void ResumeGame()
     {
         MusicController.Instancia.setLowPassMusic(false);
         MusicController.Instancia.PauseAudioSource(MusicController.Instancia.MusicAudioSource);
+        MusicController.Instancia.UnpauseAudioSource(MusicController.Instancia.FxAudioSourceUcenin, false);
         GameOnPause = false;
         /* ARCamera.transform.GetChild(0).GetComponent<MonoBehaviour>().enabled = true; */
     }
 
+    /* private IEnumerator EsperaColorOriginal(GameObject parteUcenin, Color color, float duracion)
+    {
+        Debug.Log(MusicController.Instancia.FxAudioSourceUcenin.clip.length + "Duracion Audio");
+        yield return new WaitForSeconds(duracion == -1 ? MusicController.Instancia.FxAudioSourceUcenin.clip.length : duracion);
+        parteUcenin.GetComponent<Renderer>().material.color = color;
+
+    } */
+
+    private IEnumerator EsperaColorOriginal(GameObject parte, Color color, float duracion, int cantInteracciones)
+    {
+        /* if(anotherInteractionSelected)
+        {   
+            if(this.duracion == duracion)
+            {
+                time2 = Time.deltaTime;
+                yield break;
+            }
+            else
+            {
+                time2 = 0;   
+            }
+        } */
+        this.duracion = duracion;
+        Debug.Log("Interaccion ocurriendo " + InteractionIsOn);
+        Debug.Log("Otra interaccion antes de esperar" + anotherInteractionSelected);
+        yield return new WaitForSeconds(duracion == -1 ? MusicController.Instancia.FxAudioSourceUcenin.clip.length : duracion);
+        /* while(true)
+        {
+            if(time1 == time2)
+            {
+                break;
+            }
+            timeAux = time2;
+            yield return new WaitForSeconds(time2 - time1);
+            time1 = timeAux;
+        } */
+        Debug.Log("Termino con " + anotherInteractionSelected);
+
+        time1 = Time.deltaTime;
+
+        anotherInteractionSelected = false;
+        InteractionIsOn = false;
+
+        if(GameOnPause)
+        {
+            yield return new WaitUntil(() => !GameOnPause);
+        }
+        Debug.Log("Decidiendo");
+        switch(parte.name)
+        {
+            case "Chest":
+                Debug.Log("Entrando Chest");
+                CambiarColorChest(color);
+                break;
+            case "UIcon":
+                Debug.Log("Entrando UIcon");
+                CambiarColorUIcon();
+                break;
+            default:
+                parte.GetComponent<Renderer>().material.color = color;
+                break;
+        }
+    }
 
     private void Update() 
     {
@@ -157,6 +228,7 @@ public class GameController : MonoBehaviour
             {
                 return;
             }
+            Debug.Log("Entrado");
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
             float Distancia = 100f;
@@ -213,8 +285,24 @@ public class GameController : MonoBehaviour
                             interaccion = 10;
                             GoAccion(6);
                             break;
+                        default:
+                            interaccion = -1;
+                            break;
                     }
-                    CambiarColor();
+                    if(interaccion == -1)
+                    {
+                        return;
+                    }
+                    if(!InteractionIsOn)
+                    {
+                        InteractionIsOn = true;
+                    }
+                    else
+                    {
+                        anotherInteractionSelected = true;
+                    }
+
+                        CambiarColor();
                 } 
             }
         } 
@@ -264,6 +352,7 @@ public class GameController : MonoBehaviour
     {
         ConcatenacionAcciones = ConcatenacionAcciones + Accion;
         VerificarAcciones();
+        MusicController.Instancia.ReproducirUceninSonido(Accion);
         if(AccionAux == Accion)
         {
             return;
@@ -272,7 +361,6 @@ public class GameController : MonoBehaviour
         {
             StopAccion(AccionAux);
         }
-        MusicController.Instancia.ReproducirUceninSonido(Accion);
         switch(Accion)
         {
             case 0:
@@ -336,10 +424,10 @@ public class GameController : MonoBehaviour
 
     private void CambiarColor()
     {
-        if(interaccion == auxInteraccion)
+        /* if(interaccion == auxInteraccion && InteractionIsOn)
         {
             return;
-        }
+        } */
         if(interaccion > 8)
         {
             CambiarColorCompleto();
@@ -381,17 +469,44 @@ public class GameController : MonoBehaviour
                 this.PartesUcenin[auxInteraccion].GetComponent<Renderer>().material.color = MaterialAux;
             }
         }
-        this.MaterialAux = PartesUcenin[interaccion].GetComponent<Renderer>().material.color;
+        this.MaterialAux = PartesUcenin[interaccion].GetComponent<Renderer>().material.color == Color.green ? this.MaterialAux : PartesUcenin[interaccion].GetComponent<Renderer>().material.color;
         this.PartesUcenin[interaccion].GetComponent<Renderer>().material.color = Color.green;
         this.auxInteraccion = interaccion;
+        Debug.Log("Material: " + this.MaterialAux + " Color original: " + PartesUcenin[interaccion].GetComponent<Renderer>().material.color);
+        StartCoroutine(EsperaColorOriginal(PartesUcenin[interaccion], MaterialAux, -1f, cantInteracciones));
+    }
+
+    private void CambiarColorUIcon()
+    {
+        foreach(Renderer render in PartesUcenin[10].GetComponentsInChildren<Renderer>())
+        {
+            render.material.color = materialNaranjo;
+        }
+        NBackground.GetComponent<Renderer>().material.color = materialNaranjo;
+        BackgroundCross.GetComponent<Renderer>().material.color = materialAzul;
+        MiddleArrow.GetComponent<Renderer>().material.color = materialAzul;
+        PartesUcenin[0].GetComponent<Renderer>().material.color = materialAzul;
+        PartesUcenin[1].GetComponent<Renderer>().material.color = materialAzul;
+        PartesUcenin[2].GetComponent<Renderer>().material.color = materialAzul;
+        PartesUcenin[3].GetComponent<Renderer>().material.color = materialAzul;
+        PartesUcenin[8].GetComponent<Renderer>().material.color = materialAzul;
+    }
+
+    private void CambiarColorChest(Color color)
+    {
+        Debug.Log("Cambiando color Chest");
+        foreach(Renderer render in PartesChest)
+        {
+            render.material.color = color;
+        }
     }
 
     private void CambiarColorCompleto()
     {
-        if(interaccion == auxInteraccion)
+        /* if(interaccion == auxInteraccion)
         {
             return;
-        }
+        } */
 
         if(this.auxInteraccion == -2)
         {
@@ -408,7 +523,7 @@ public class GameController : MonoBehaviour
             {
                 if(auxInteraccion == 10)
                 {
-                    foreach(Renderer render in PartesUcenin[auxInteraccion].GetComponentsInChildren<Renderer>())
+                    /* foreach(Renderer render in PartesUcenin[auxInteraccion].GetComponentsInChildren<Renderer>())
                     {
                         render.material.color = materialNaranjo;
                     }
@@ -419,22 +534,24 @@ public class GameController : MonoBehaviour
                     PartesUcenin[1].GetComponent<Renderer>().material.color = materialAzul;
                     PartesUcenin[2].GetComponent<Renderer>().material.color = materialAzul;
                     PartesUcenin[3].GetComponent<Renderer>().material.color = materialAzul;
-                    PartesUcenin[8].GetComponent<Renderer>().material.color = materialAzul;
+                    PartesUcenin[8].GetComponent<Renderer>().material.color = materialAzul; */
+                    CambiarColorUIcon();
                 }
                 else
                 {
-                    Debug.Log("Cambiando color Chest");
+                    /* Debug.Log("Cambiando color Chest");
                     foreach(Renderer render in PartesChest)
                     {
                         render.material.color = MaterialAux;
-                    }
+                    } */
+                    CambiarColorChest(MaterialAux);
                 }
             }
         }
-        
         if(interaccion == 10)
         {
-            this.MaterialAux = PartesUcenin[interaccion].GetComponentInChildren<Renderer>().material.color;    
+
+            this.MaterialAux = PartesUcenin[interaccion].GetComponentInChildren<Renderer>().material.color == Color.magenta ? this.MaterialAux : PartesUcenin[interaccion].GetComponentInChildren<Renderer>().material.color;    
             foreach(Renderer render in PartesUcenin[interaccion].GetComponentsInChildren<Renderer>())
             {
                 render.material.color = Color.magenta;
@@ -447,16 +564,21 @@ public class GameController : MonoBehaviour
             PartesUcenin[2].GetComponent<Renderer>().material.color = Color.magenta;
             PartesUcenin[3].GetComponent<Renderer>().material.color = Color.magenta;    
             PartesUcenin[8].GetComponent<Renderer>().material.color = Color.magenta;    
+            StartCoroutine(EsperaColorOriginal(PartesUcenin[10], MaterialAux, -1f, cantInteracciones));
         }
         else
         {
             Debug.Log("Interaccion : " + interaccion);
             Debug.Log("Nombre: " + PartesUcenin[interaccion].name);
-            this.MaterialAux = PartesUcenin[interaccion].GetComponent<Renderer>().material.color;
+
+            this.MaterialAux = PartesUcenin[interaccion].GetComponent<Renderer>().material.color == Color.green ? this.MaterialAux : PartesUcenin[interaccion].GetComponent<Renderer>().material.color;
+            Debug.Log("Material Aux " + MaterialAux + " Material Ucenin " + PartesUcenin[interaccion].GetComponent<Renderer>().material.color);
+            //this.MaterialAux = PartesUcenin[interaccion].GetComponent<Renderer>().material.color;
             foreach(Renderer render in PartesChest)
             {
                 render.material.color = Color.green;
             }
+            StartCoroutine(EsperaColorOriginal(PartesUcenin[9], MaterialAux, -1f, cantInteracciones));
 
         }
         this.auxInteraccion = interaccion;

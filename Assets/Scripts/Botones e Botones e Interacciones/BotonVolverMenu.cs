@@ -8,9 +8,10 @@ public class BotonVolverMenu : Boton
     override
     public void OnUp(){
 
-        //Time.timeScale = 1f;
+        Time.timeScale = 1f;
         SceneManager.LoadScene("MainMenu");
         MusicController.Instancia.setLowPassMusic(false);
+        MusicController.Instancia.stopUceninFx();
     }
 
 }

@@ -275,7 +275,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6569216485192967547, guid: cfb8431581b1e454fa62f268bf248916, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.5
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: 6569216485192967547, guid: cfb8431581b1e454fa62f268bf248916, type: 3}
       propertyPath: m_LocalScale.y
@@ -702,7 +702,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &265140806
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2192,7 +2192,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PanelToOpen: {fileID: 1640142342}
   PanelToClose: {fileID: 1787947030}
-  BackgroundCamera: {fileID: 0}
 --- !u!114 &1476911074
 MonoBehaviour:
   m_ObjectHideFlags: 0

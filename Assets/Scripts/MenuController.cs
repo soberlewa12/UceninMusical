@@ -25,7 +25,9 @@ public class MenuController : MonoBehaviour
 
     private void Start() 
     {
+        //PlayerPrefs.SetFloat("SkinDesbloqueada", 0);
         Time.timeScale = 1f;
+        MusicController.Instancia.CambiarVolumenMusic(1);
         //MusicController.Instancia.setLowPassMusic(false);
         //MusicController.Instancia.UnpauseAudioSource(MusicController.Instancia.MusicAudioSource);
         //StartCoroutine(MusicController.Instancia.FadeInMusic((PlayerPrefs.GetFloat("Slider", 0.0f)/10), PlayerPrefs.GetFloat("Slider", 0f)));
