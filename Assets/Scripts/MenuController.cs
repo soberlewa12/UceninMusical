@@ -25,7 +25,8 @@ public class MenuController : MonoBehaviour
 
     private void Start() 
     {
-        //PlayerPrefs.SetFloat("SkinDesbloqueada", 0);
+        //PlayerPrefs.SetFloat("SkinDesbloqueada", 0); 
+        //PlayerPrefs.SetFloat("SkinDesbloqueada", 0); 
         Time.timeScale = 1f;
         MusicController.Instancia.CambiarVolumenMusic(1);
         //MusicController.Instancia.setLowPassMusic(false);
