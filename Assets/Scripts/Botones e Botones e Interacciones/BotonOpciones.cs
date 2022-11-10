@@ -14,6 +14,10 @@ public class BotonOpciones : Boton
     public void OnUp()
     {
         MusicController.Instancia.BotonClick();
+        if(PanelToOpen.name.Equals("CreditosPanel"))
+        {
+            MusicController.Instancia.CambiarMusica(1);
+        }
         PanelToOpen.SetActive(true);
         PanelToClose.SetActive(false);
     }

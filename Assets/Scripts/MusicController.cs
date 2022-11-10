@@ -13,6 +13,7 @@ public class MusicController : MonoBehaviour
     [SerializeField] public AudioSource MusicAudioSource;
     [SerializeField] public AudioSource FxAudioSource;
     [SerializeField] public AudioSource FxAudioSourceUcenin;
+    [SerializeField] private List<AudioClip> Musica;
     [SerializeField] private List<AudioClip> Fx;
     [SerializeField] private List<AudioClip> FxUcenin;
 
@@ -110,6 +111,11 @@ public class MusicController : MonoBehaviour
     public void PauseAudioSource(AudioSource audioSoruce)
     {
         audioSoruce.Pause();
+    }
+    public void CambiarMusica(int Clip)
+    {
+        MusicAudioSource.clip = Musica[Clip];
+        MusicAudioSource.Play();    
     }
 
     public void UnpauseAudioSource(AudioSource audioSource, bool mode)

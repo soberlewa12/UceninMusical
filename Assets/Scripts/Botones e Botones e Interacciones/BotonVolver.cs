@@ -14,15 +14,19 @@ public class BotonVolver : Boton
     public void OnUp(){
 
         MusicController.Instancia.BotonAtras();
-        if(NameController.Instancia.getNombreIncorrecto())
+        if(PanelToClose.name.Equals("CreditosPanel"))
+        {
+                MusicController.Instancia.CambiarMusica(0);
+                PanelToOpen.SetActive(true);
+                PanelToClose.SetActive(false);
+        }
+        else if(NameController.Instancia.getNombreIncorrecto())
         {
             NameController.Instancia.startParpadeo();
-        }
-        else
+        }else
         {
             PanelToOpen.SetActive(true);
             PanelToClose.SetActive(false);
         }
     }
-
 }
