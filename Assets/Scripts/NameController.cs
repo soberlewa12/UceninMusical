@@ -16,13 +16,18 @@ public class NameController : MonoBehaviour
     private void Start() 
     {
 
-        TextCuadro.text = PlayerPrefs.GetString("Nombre");
+        TextCuadro.text = PlayerPrefs.GetString("Nombre", "");
         Instancia = this;
 
     }
     private void OnEnable() 
     {
-        TextCuadro.text = PlayerPrefs.GetString("Nombre");
+        TextCuadro.text = PlayerPrefs.GetString("Nombre", "");
+        Debug.Log("El nombre es: " + TextCuadro.text);
+        if(TextCuadro.text.Equals(""))
+        {
+            StartCoroutine(Parpadeo());
+        }
     }
 
     public void OnValueChanged()
